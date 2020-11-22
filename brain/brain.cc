@@ -3,7 +3,8 @@
 #include <math.h>
 #include <string>
 #include <unistd.h>
-
+#include <iterator> 
+#include <map> 
 #include "robot.hh"
 extern "C"{
 #include "gfx.c"
@@ -12,6 +13,8 @@ extern "C"{
 using std::cout;
 using std::endl;
 using namespace std;
+
+map<pair<int, int>,int>occgrid;
 
 int maxsound = 0;
 bool turning = false ;
@@ -60,9 +63,11 @@ pos_y = robot->get_robot_y();
 
 //mapviz (round(pos_x),round(pos_y));  
 
-  
+int intx = round(pos_x);
+int inty = round(pos_y); 	
 int currentsound = robot->get_noise_sensor();
-mapviz (round(pos_x),round(pos_y),currentsound);
+mapviz(round(pos_x),round(pos_y),currentsound);
+occgrid.insert(make_pair(make_pair(intx,inty),currentsound));
 
 
 if (currentsound >= maxsound) {
