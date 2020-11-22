@@ -41,6 +41,18 @@ RgRobot::get_robot_theta(){
   return (angle * (3.14/180));
 }
 
+double
+RgRobot::get_robot_y(){
+  return 2.0;
+}
+
+double
+RgRobot::get_robot_x(){
+  return 2.0;
+}
+
+
+
 void
 RgRobot::set_vel(double lvel, double rvel)
 {

@@ -5,6 +5,9 @@
 #include <unistd.h>
 
 #include "robot.hh"
+extern "C"{
+#include "gfx.c"
+}
 
 using std::cout;
 using std::endl;
@@ -14,8 +17,20 @@ int maxsound = 0;
 bool turning = false ;
 string lastdir = "forward";
 int lastsound = 0;
-float pos_t;
+double pos_t;
 int stateCount;
+double pos_x;
+double pos_y;
+void  mapviz(int x, int y, int sound ){
+cout << "Map Viz "<<y<< "," <<x << endl;
+gfx_color(0 , sound*4.25, 0);
+for(int t = x*10-5; t <= x*10+5; t++ ){ 
+for(int z = y*10-5; z<= y*10+5; z++ ){
+gfx_point(z+200,t+200);
+
+}}
+}
+
 
 void
 callback(Robot* robot)
@@ -40,9 +55,14 @@ callback(Robot* robot)
     }*/
 cout << robot->get_noise_sensor() <<" "  << robot->get_robot_theta() << " "<< lastdir <<  endl;
 pos_t = robot->get_robot_theta();
-  
+pos_x = robot->get_robot_x();
+pos_y = robot->get_robot_y();
 
-int currentsound = 0;
+//mapviz (round(pos_x),round(pos_y));  
+
+  
+int currentsound = robot->get_noise_sensor();
+mapviz (round(pos_x),round(pos_y),currentsound);
 
 
 if (currentsound >= maxsound) {
@@ -110,7 +130,12 @@ main(int argc, char* argv[])
 
     std::string bname(basename(argv[0]));
     std::cout << "bin: [" << bname << "]" << endl;
-
+    int ysize = 1000;
+    int xsize = 1000;
+    char c;
+    
+    gfx_open(xsize,ysize,"Example Graphics Program");
+    
     if(bname == "gz_brain") {
       std::cout << "making robot: Gazebo mode" << '\n';
       robot = new GzRobot(argc, argv, callback);
@@ -121,9 +146,18 @@ main(int argc, char* argv[])
       robot = new RgRobot(argc, argv, callback);
     }
 
+	
+
+
     sleep(2);
 
     robot->do_stuff();
+    while(1) {
+                // Wait for the user to press a character.
+        c = gfx_wait();
+
+                // Quit if it is the letter q.
+       if(c=='q') break;}
     delete robot;
     return 0;
 }
