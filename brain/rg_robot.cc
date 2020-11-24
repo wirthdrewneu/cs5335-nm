@@ -14,6 +14,12 @@ using std::string;
 #include "robot.hh"
 #include "ranger-library.hh"
 
+double xcount = 200;
+double ycount = 200;
+double calls = 0;
+
+
+
 RgRobot::RgRobot(int argc, char* argv[], void (*cb)(Robot*))
     : on_update(cb)
 {
@@ -32,7 +38,7 @@ RgRobot::get_line_status(){
 
 double
 RgRobot::get_noise_sensor(){
-  return read_sound_sensor();
+  return round(read_sound_sensor()/10);
 }
 
 double
@@ -43,12 +49,33 @@ RgRobot::get_robot_theta(){
 
 double
 RgRobot::get_robot_y(){
-  return 2.0;
+ double angle = read_gyroscope_z();
+double  helperangle = angle * (3.14/180);
+if (abs(helperangle) <=.75 ){
+ycount++;
+} 
+else if (abs(helperangle) >=2.25 ){
+ycount--;
+}
+
+
+ return ycount;
+
 }
 
 double
 RgRobot::get_robot_x(){
-  return 2.0;
+double angle = read_gyroscope_z();
+double  helperangle = angle * (3.14/180);
+if (helperangle >=-2.2 && helperangle < -.75){
+xcount++;
+}
+else if (helperangle <=2.2 && helperangle > .75 ){
+xcount--;
+}
+ 
+      
+	return xcount;
 }
 
 

@@ -26,18 +26,21 @@ double pos_x;
 double pos_y;
 void  mapviz(int x, int y, int sound ){
 cout << "Map Viz "<<y<< "," <<x << endl;
-gfx_color(0 , sound*4.25, 0);
+gfx_color(0 , 255  /*sound*4.25*/ , 0);
 for(int t = x*10-5; t <= x*10+5; t++ ){ 
 for(int z = y*10-5; z<= y*10+5; z++ ){
 gfx_point(z+200,t+200);
-
+cout << "Map Viz "<<y<< "," <<x << endl;
+/*sleep(.25);*/
 }}
 }
-
+int tcounter = 0;
 
 void
 callback(Robot* robot)
 {
+//	robot->set_vel(4.0, 4.0);
+
     /*cout << robot->get_line_status() << endl;
 
     cout << robot->get_noise_sensor() << endl;
@@ -46,7 +49,7 @@ callback(Robot* robot)
 */
     // robot->set_vel(-5.0, 5.0)
 
-    /*stateCount++;
+/*    stateCount++;
     std::cout << "state count: " << stateCount << '\n';
     if(stateCount < 3){
          robot->set_vel(1.5, 1.5);
@@ -56,11 +59,11 @@ callback(Robot* robot)
       stateCount = 0;
       robot->set_vel(-1.5, 1.5);
     }*/
-cout << robot->get_noise_sensor() <<" "  << robot->get_robot_theta() << " "<< lastdir <<  endl;
+//cout << robot->get_noise_sensor() <<" "  << robot->get_robot_theta() << " "<< lastdir <<  endl;
 pos_t = robot->get_robot_theta();
 pos_x = robot->get_robot_x();
 pos_y = robot->get_robot_y();
-
+cout << pos_x <<" "  << pos_y << " xy working?  "<< lastdir <<  endl;
 //mapviz (round(pos_x),round(pos_y));  
 
 int intx = round(pos_x);
@@ -69,8 +72,24 @@ int currentsound = robot->get_noise_sensor();
 mapviz(round(pos_x),round(pos_y),currentsound);
 occgrid.insert(make_pair(make_pair(intx,inty),currentsound));
 
+/*if (true){
 
-if (currentsound >= maxsound) {
+cout << " Theta  "  << robot->get_robot_theta()  <<  endl;
+
+if ( tcounter % 2 == 0 )
+{
+	// robot->set_vel(0, 0);
+	
+		robot->set_vel(-4, 4);
+tcounter++;
+}
+else {
+ robot->set_vel(4, 4);
+ tcounter++;
+}
+}
+
+else*/ if (currentsound >= maxsound) {
         robot->set_vel(4, 4);
 	maxsound= currentsound;
 }
@@ -83,7 +102,7 @@ else if (currentsound < maxsound  && lastdir == "forward" && lastsound != curren
 	lastsound= currentsound;	
 	}
 			else{
-	robot->set_vel(-2, 2);}
+	robot->set_vel(-4, 4);}
 
 	}
 else if(currentsound <= maxsound && lastdir == "backward" &&  lastsound != currentsound ) {
@@ -94,7 +113,7 @@ else if(currentsound <= maxsound && lastdir == "backward" &&  lastsound != curre
 
 	 }
                           else{
-          robot->set_vel(-2, 2);}
+          robot->set_vel(-4, 4);}
           
   
 	}
@@ -106,7 +125,7 @@ else if(currentsound <= maxsound && lastdir == "backward" &&  lastsound != curre
  
 	   }
                             else{
-            robot->set_vel(-2, 2);}                
+            robot->set_vel(-4, 4);}                
           }
 else if (currentsound < maxsound  && lastdir == "right" && lastsound != currentsound ) {
         turning =  true ;
@@ -117,7 +136,7 @@ else if (currentsound < maxsound  && lastdir == "right" && lastsound != currents
 
 	}
                         else{
-        robot->set_vel(-2, 2);}
+        robot->set_vel(-4, 4);}
 
         }
 else {

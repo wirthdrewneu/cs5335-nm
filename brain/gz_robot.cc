@@ -219,7 +219,7 @@ GzRobot::on_sound(ConstIntPtr &msg)
 
 double
 GzRobot::get_noise_sensor() {
-  return this->noise;
+  return round(this->noise/10);
 }
 
 double
