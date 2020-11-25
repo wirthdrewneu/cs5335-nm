@@ -106,7 +106,13 @@ callback(Robot* robot)
 	}
 	}
 
-	else*/ if (currentsound >= maxsound) {
+	else*/ 
+	
+	if(robot->get_line_status()==0){
+    	 	heading = robot->get_robot_theta();
+    	 	sleep(1);
+    	 
+    	 if (currentsound >= maxsound) {
 		robot->set_vel(4, 4);
 		maxsound= currentsound;
 	}
@@ -160,6 +166,18 @@ callback(Robot* robot)
 		robot->set_vel(4, 4);
 
 	}
+    	}
+    	else if(robot->get_line_status()==1){
+    		//If On Right Side Of Line Turn Left
+    		robot->set_vel(1.0,1.5);
+    	}else if(robot->get_line_status()==2){
+    		//If On Left Side Of Line Turn Right
+    		robot->set_vel(1.5,1.0);
+    	}else{
+    		//If On Line Go Straight
+    		robot->set_vel(1.5,1.5);
+    	}
+	
 	return;
 }
 
